@@ -1,5 +1,4 @@
 const mongoose = require('mongoose')
-const User = require('./User')
 const { Schema } = mongoose
 const { ObjectId } = mongoose.Schema.Types
 
@@ -15,9 +14,18 @@ const todoSchema = new Schema({
   user: {
     type: ObjectId,
     ref: 'User',
-    required: true
+    required: false
   }
 })
+
+todoSchema.statics.register = async function (text, user, completed) {
+  const todo = new this()
+  todo.text = text
+  todo.completed = completed
+  todo.user = user
+  await todo.save()
+  return todo
+}
 
 const Todo = mongoose.model('Todo', todoSchema)
 

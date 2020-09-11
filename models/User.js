@@ -41,7 +41,6 @@ userSchema.statics.signUp = async function (username, password) {
   return user
 }
 
-
 userSchema.methods.hashPassword = function (plainText) {
   const user = this
   return bcrypt.hash(plainText, 10).then(hash => {
