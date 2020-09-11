@@ -25,7 +25,7 @@ router.get('/hello', (req, res) => {
 })
 
 router.get('/todos', async (req, res) => {
-  console.log('get todos')
+  // console.log('get todos')
   const authorization = req.header('Authorization') || ''
   const [type, token] = authorization.split(' ')
 
@@ -41,15 +41,15 @@ router.get('/todos', async (req, res) => {
 })
 
 router.post('/todos', (req, res) => {
-  console.log('req.body', req.body)
-  console.log('post todos')
+  // console.log('req.body', req.body)
+  // console.log('post todos')
   const authorization = req.header('Authorization') || ''
   const [type, token] = authorization.split(' ')
 
   if (type === 'Bearer' && jwt.verify(token, 'CHANGEME!')) {
     console.log('we got here')
     const payload = jwt.decode(token, 'CHANGEME!')
-    console.log(payload)
+    // console.log(payload)
 
     // async function todos () {
     Todo.register(req.body.text, payload._id, false)
@@ -59,6 +59,19 @@ router.post('/todos', (req, res) => {
     // todos()
   } else {
     res.status(401).send('unauthorized')
+  }
+})
+
+router.post('/remove', (req, res) => {
+  const authorization = req.header('Authorization') || ''
+  const [type, token] = authorization.split(' ')
+
+  if (type === 'Bearer' && jwt.verify(token, 'CHANGEME!')) {
+    const payload = jwt.decode(token, 'CHANGEME!')
+    Todo.deleteOne({ _id: req.body._id }, err => {
+      if (err) return res.status(500).send(err)
+      res.status(200).send('ok')
+    })
   }
 })
 

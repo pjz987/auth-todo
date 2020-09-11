@@ -9,18 +9,20 @@ export default class SignUp extends React.Component {
       password2: '',
       noMatch: false,
       noUsername: false,
-      redirect: false
+      // redirect: false
     }
   }
 
   handleSubmit = evt => {
+    evt.preventDefault()
+    this.setState({ noMatch: false, noUsername: false })
     if (this.state.password1 !== this.state.password2) {
       this.setState({ noMatch: true })
     } else if (!this.state.username) {
       this.setState({ noUsername: true })
+    } else {
+      this.props.onSubmit(this.state.username, this.state.password1)
     }
-    this.props.onSubmit(this.state.text)
-    evt.preventDefault()
   }
 
   handleChangeUsername = evt => {
@@ -41,9 +43,9 @@ export default class SignUp extends React.Component {
         <label htmlFor='username'>Username:</label>
         <input name='username' onChange={this.handleChangeUsername} />
         <label htmlFor='password1'>Password:</label>
-        <input name='password1' onChange={this.handleChangePassword1} />
+        <input type='password' name='password1' onChange={this.handleChangePassword1} />
         <label htmlFor='password2'>Re-Enter Password:</label>
-        <input name='password2' onChange={this.handleChangePassword2} />
+        <input type='password' name='password2' onChange={this.handleChangePassword2} />
         <button>Sign Up</button>
         {this.state.noUsername
           ? <div>You must choose a username!</div>

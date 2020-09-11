@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken')
 const router = express.Router()
 
 router.post('/sign-up', (req, res) => {
-  console.log(req.body)
+  // console.log(req.body)
   User.findOne({ username: req.body.username }, async (err, userExists) => {
     if (err) return res.status(500).send(err)
     if (userExists) return res.status(400).send('username already exists')
